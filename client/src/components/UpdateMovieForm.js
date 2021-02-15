@@ -9,7 +9,7 @@ const initialState = {
 	stars: [],
 };
 
-export default UpdatMovieForm = () => {
+const UpdateMovieForm = (props) => {
 	const [movieData, setMovieData] = useState({ initialState });
 	const { id } = useParams();
 
@@ -21,7 +21,25 @@ export default UpdatMovieForm = () => {
 			.catch((err) =>
 				console.error('ERROR PULLING MOVIE DATA', err.message)
 			);
-	}, []);
+	}, [id]);
+
+	const handleChanges = (e) => {
+		e.persist();
+		setMovieData({
+			...movieData,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		axios.put(`http://localhost:5000/api/movies/${id}`, movieData).then(
+			(res) => {
+				setMovieData(initialState);
+				props.history.push('/');
+			}
+		);
+	};
 
 	return (
 		<div>
@@ -61,7 +79,11 @@ export default UpdatMovieForm = () => {
 					onChange={handleChanges}
 					value={movieData.stars}
 				/>
+
+				<button>Save Movie</button>
 			</form>
 		</div>
 	);
 };
+
+export default UpdateMovieForm;
