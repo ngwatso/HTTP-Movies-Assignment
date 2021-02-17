@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const UpdateMovieForm = (props) => {
-	const [movieData, setMovieData] = useState({ initialState });
+	const [movieData, setMovieData] = useState(initialState);
 	const { id } = useParams();
 	const { push } = useHistory();
 
@@ -32,10 +32,6 @@ const UpdateMovieForm = (props) => {
 
 	const handleChanges = (e) => {
 		e.persist();
-		// let value = e.target.value;
-		// if (e.target.name === 'metascore') {
-		// 	value = parseInt(value, 10);
-		// }
 		setMovieData({
 			...movieData,
 			[e.target.name]: e.target.value,
@@ -55,10 +51,8 @@ const UpdateMovieForm = (props) => {
 
 		axios.put(`http://localhost:5000/api/movies/${id}`, newMovieData)
 			.then((res) => {
-				// setMovieData(initialState);
-				// props.setMovieList(res.data);
 				props.getMovieList();
-				push(`/movies`);
+				push('/');
 			})
 			.catch((err) =>
 				console.error(`error saving movie: ${movieData.title}`)
