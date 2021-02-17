@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
+// ?? Set initialState
 const initialState = {
+	id: Date.now(),
 	title: '',
 	director: '',
 	metascore: '',
@@ -12,19 +14,28 @@ const initialState = {
 const UpdateMovieForm = (props) => {
 	const [movieData, setMovieData] = useState({ initialState });
 	const { id } = useParams();
+	const { push } = useHistory();
 
+	// ?? useEffect, axios
 	useEffect(() => {
 		axios.get(`https://localhost:5000/api/movies/${id}`)
 			.then((res) => {
 				setMovieData(res.data);
 			})
 			.catch((err) =>
-				console.error('ERROR PULLING MOVIE DATA', err.message)
+				console.error(
+					`unable to get movie: ${movieData.title}`,
+					err.message
+				)
 			);
 	}, [id]);
 
 	const handleChanges = (e) => {
 		e.persist();
+		// let value = e.target.value;
+		// if (e.target.name === 'metascore') {
+		// 	value = parseInt(value, 10);
+		// }
 		setMovieData({
 			...movieData,
 			[e.target.name]: e.target.value,
@@ -33,16 +44,30 @@ const UpdateMovieForm = (props) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		axios.put(`http://localhost:5000/api/movies/${id}`, movieData).then(
-			(res) => {
-				setMovieData(initialState);
-				props.history.push('/');
-			}
-		);
+
+		const newMovieData = {
+			...movieData,
+			title: movieData.title,
+			director: movieData.director,
+			metascore: movieData.metascore,
+			stars: movieData.stars.split(', '),
+		};
+
+		axios.put(`http://localhost:5000/api/movies/${id}`, newMovieData)
+			.then((res) => {
+				// setMovieData(initialState);
+				// props.setMovieList(res.data);
+				props.getMovieList();
+				push(`/movies`);
+			})
+			.catch((err) =>
+				console.error(`error saving movie: ${movieData.title}`)
+			);
 	};
 
 	return (
 		<div>
+			<h2>Update Movie</h2>
 			<form onSubmit={handleSubmit}>
 				<input
 					type="text"
