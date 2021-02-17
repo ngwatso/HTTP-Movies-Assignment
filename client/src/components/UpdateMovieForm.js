@@ -61,7 +61,7 @@ const UpdateMovieForm = (props) => {
 
 	return (
 		<div>
-			<h2>Update Movie</h2>
+			<h4>Edit Movie</h4>
 			<form onSubmit={handleSubmit}>
 				<input
 					type="text"

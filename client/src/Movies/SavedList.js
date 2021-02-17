@@ -16,10 +16,14 @@ function SavedList({ list }) {
 					</NavLink>
 				);
 			})}
-			<div className="home-button">
-				<Link to="/">Home</Link>
+			<div className="button-container">
+				<div className="home-button">
+					<Link to="/">Home</Link>
+				</div>
+				<div className="home-button">
+					<Link to="add-movie">Add Movies</Link>
+				</div>
 			</div>
-			<Link to="add-movie">Add Movies</Link>
 		</div>
 	);
 }

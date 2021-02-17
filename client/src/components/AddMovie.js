@@ -39,6 +39,7 @@ const AddMovie = (props) => {
 
 	return (
 		<div className="add-movie-container">
+			<h4>Add Movie</h4>
 			<form onSubmit={handleSubmit}>
 				<input
 					htmlFor="title"
